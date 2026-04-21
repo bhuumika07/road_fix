@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - RoadFix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .about-hero {
+            background: var(--rf-bg) !important;
+            padding: 42px 24px 24px;
+            border-bottom: none;
+        }
+        .about-hero::after {
+            content: none !important;
+            background: none !important;
+        }
+        .about-hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 30px;
+            align-items: center;
+            background: #FFFFFF;
+            border: 1px solid #E9E3D8;
+            border-radius: 20px;
+            box-shadow: 0 10px 24px rgba(26,60,52,0.08);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-hero-inner::before {
+            content: "";
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            top: -46px;
+            left: -34px;
+            background: rgba(245, 166, 35, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .about-hero-inner::after {
+            content: "";
+            position: absolute;
+            right: 26px;
+            bottom: 18px;
+            width: 64px;
+            height: 64px;
+            border: 2px dashed rgba(26, 60, 52, 0.25);
+            border-radius: 16px;
+            transform: rotate(10deg);
+            pointer-events: none;
+        }
+        .about-kicker {
+            margin: 0 0 10px;
+            color: var(--rf-accent);
+            font-style: italic;
+            font-weight: 600;
+        }
+        .about-hero h1 {
+            margin: 0 0 12px;
+            color: var(--rf-text-dark);
+            font-size: clamp(2rem, 4.4vw, 3.3rem);
+            line-height: 1.12;
+            font-family: var(--font-heading);
+            max-width: 560px;
+        }
+        .about-hero p {
+            margin: 0;
+            color: var(--rf-text-muted);
+            font-size: 1.03rem;
+            max-width: 560px;
+        }
+        .about-hero-media img {
+            width: 100%;
+            height: 290px;
+            object-fit: cover;
+            border: 8px solid #DFAE4A;
+            border-radius: 26px;
+            filter: grayscale(100%);
+            box-shadow: 0 18px 30px rgba(0,0,0,0.18);
+            animation: heroFloat 3.2s ease-in-out infinite;
+        }
+
+        .mission-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin: 56px auto;
+            align-items: center;
+        }
+        .mission-text h2, .values-section h2, .team-section h2 {
+            font-family: var(--font-heading);
+            color: var(--rf-text-dark);
+        }
+        .mission-text h2 {
+            font-size: clamp(1.8rem, 3vw, 2.35rem);
+            margin-bottom: 12px;
+        }
+        .mission-text p {
+            color: var(--rf-text-muted);
+            line-height: 1.75;
+            font-size: 1rem;
+        }
+        .mission-media {
+            position: relative;
+            min-height: 360px;
+        }
+        .mission-blob {
+            position: absolute;
+            width: 78%;
+            height: 220px;
+            left: 0;
+            top: 62px;
+            background: var(--rf-primary-dark);
+            border-radius: 45% 55% 52% 38%;
+            opacity: 0.95;
+            animation: blobPulse 6s ease-in-out infinite;
+        }
+        .mission-photo {
+            position: absolute;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 3px solid #fff;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+            animation: photoFloat 3s ease-in-out infinite;
+            transition: transform 0.28s ease, box-shadow 0.28s ease, filter 0.28s ease;
+        }
+        .mission-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+        .mission-photo.main { width: 58%; height: 210px; left: 9%; top: 80px; z-index: 2; }
+        .mission-photo.top { width: 42%; height: 140px; right: 7%; top: 22px; z-index: 3; animation-delay: 0.35s; }
+        .mission-photo.bottom { width: 45%; height: 132px; right: 10%; bottom: 10px; z-index: 3; animation-delay: 0.75s; }
+        .mission-photo:hover {
+            transform: translateY(-14px) scale(1.05) rotate(-1deg);
+            box-shadow: 0 22px 36px rgba(0,0,0,0.24);
+            filter: contrast(1.08);
+        }
+        .mission-stat {
+            margin-top: 18px;
+            background: #FFFFFF;
+            border-radius: 18px;
+            padding: 18px 18px 16px;
+            border: 1px solid #E9E3D8;
+            box-shadow: 0 8px 20px rgba(26,60,52,0.08);
+            max-width: 300px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .mission-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(26,60,52,0.12);
+        }
+        .mission-stat i { color: var(--rf-primary-dark); margin-right: 8px; font-size: 0.85rem; opacity: 0.8; }
+        .mission-stat h3 {
+            font-size: 2rem;
+            margin: 8px 0 4px;
+            color: var(--rf-text-dark);
+            font-family: var(--font-heading);
+            line-height: 1;
+        }
+        .mission-stat p { color: var(--rf-text-muted); margin: 0; font-weight: 600; font-size: 0.9rem; }
+
+        .values-section, .team-section {
+            padding: 30px 0 56px;
+        }
+        .values-section h2, .team-section h2 {
+            text-align: center;
+            font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+            margin-bottom: 26px;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .value-card {
+            background: #FFFFFF;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #E9E3D8;
+            box-shadow: 0 8px 20px rgba(26,60,52,0.08);
+            transition: transform 0.25s ease;
+            animation: sectionRise 0.55s ease both;
+        }
+        .values-grid .value-card:nth-child(2) { animation-delay: 0.1s; }
+        .values-grid .value-card:nth-child(3) { animation-delay: 0.2s; }
+        .values-grid .value-card:nth-child(4) { animation-delay: 0.3s; }
+        .value-card:hover { transform: translateY(-5px); }
+        .value-card i {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            color: var(--rf-primary-dark);
+            background: rgba(245, 166, 35, 0.2);
+        }
+        .value-card h4 { margin: 0 0 8px; font-size: 1.22rem; color: var(--rf-text-dark); }
+        .value-card p { margin: 0; color: var(--rf-text-muted); line-height: 1.6; }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .team-card {
+            background: #FFFFFF;
+            padding: 26px;
+            border-radius: 16px;
+            border: 1px solid #E9E3D8;
+            box-shadow: 0 8px 20px rgba(26,60,52,0.08);
+            text-align: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            animation: sectionRise 0.55s ease both;
+        }
+        .team-card:nth-child(2) { animation-delay: 0.12s; }
+        .team-card:nth-child(3) { animation-delay: 0.24s; }
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 28px rgba(26,60,52,0.14);
+        }
+        .avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 12px;
+            border: 3px solid #F0E8D8;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+        .team-card h4 { margin: 0 0 4px; color: var(--rf-text-dark); font-size: 1.15rem; }
+        .team-card .role { color: var(--rf-accent); font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; }
+        .team-card p { color: var(--rf-text-muted); line-height: 1.6; font-size: 0.92rem; margin: 0; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-8px) rotate(-0.6deg); }
+            50% { transform: translateY(-14px) rotate(0deg); }
+            75% { transform: translateY(-7px) rotate(0.6deg); }
+        }
+        @keyframes blobPulse {
+            0%, 100% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(1.03); opacity: 0.88; }
+        }
+        @keyframes photoFloat {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-8px) rotate(-0.7deg); }
+            50% { transform: translateY(-13px) rotate(0deg); }
+            75% { transform: translateY(-7px) rotate(0.7deg); }
+        }
+        @keyframes sectionRise {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width: 992px) {
+            .about-hero-inner, .mission-section, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-hero-inner {
+                padding: 22px;
+            }
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            .mission-media {
+                min-height: 320px;
+            }
+            .about-hero-media img,
+            .mission-photo,
+            .mission-blob {
+                animation: none;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Navbar -->
+        <!-- UNIVERSAL NAVBAR -->
+    <nav class="navbar" id="main-navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <i class="fa-solid fa-road"></i>
+          <span>RoadFix</span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" data-page="index">Home</a></li>
+          <li><a href="about.html" data-page="about">About</a></li>
+          <li><a href="dashboard.html" data-page="dashboard">Issues</a></li>
+          <li><a href="faq.html" data-page="faq">How It Works</a></li>
+          <li><a href="contact.html" data-page="contact">Contact</a></li>
+          <li class="admin-only" style="display:none"><a href="audit.html" data-page="audit">Audit Log</a></li>
+        </ul>
+        
+        <div class="nav-right">
+          <div class="user-info auth-only" style="display:none">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-details">
+              <span class="user-name" id="nav-user-name">User</span>
+              <span class="user-role-badge" id="nav-role-badge">citizen</span>
+            </div>
+          </div>
+          <a href="report.html" class="btn-report-now"><i class="fa-solid fa-flag"></i> Report Now</a>
+          <button class="btn-icon auth-only" id="logout-btn" style="display:none" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="about-hero reveal">
+        <div class="about-hero-inner">
+            <div>
+                <p class="about-kicker">Welcome to RoadFix</p>
+                <h1>Building Safer Roads Through Community Action</h1>
+                <p>We combine citizen reporting, transparent tracking, and faster response to fix potholes, drains, and road hazards before they become bigger risks.</p>
+            </div>
+            <div class="about-hero-media">
+                <img src="https://images.pexels.com/photos/448828/pexels-photo-448828.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Road maintenance worker repairing an active roadway">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="mission-section reveal">
+            <div class="mission-text">
+                <h2>Our Mission</h2>
+                <p>RoadFix represents the future of civic technology. We believe that safe roads and functional infrastructure lead directly to thriving communities. By empowering citizens with an easy-to-use reporting tool, we streamline communication with maintenance crews and city officials—ensuring that potholes sink, broken lights shine, and hazards are handled efficiently.</p>
+                <div class="mission-stat">
+                    <i class="fa-solid fa-flag"></i>
+                    <h3 id="live-stat-reports">--</h3>
+                    <p>Total Reports Lodged</p>
+                </div>
+            </div>
+            <div class="mission-media">
+                <div class="mission-blob"></div>
+                <div class="mission-photo main">
+                    <img src="https://images.pexels.com/photos/29422321/pexels-photo-29422321.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Cracked asphalt and pothole texture on a damaged road">
+                </div>
+                <div class="mission-photo top">
+                    <img src="https://images.pexels.com/photos/33484882/pexels-photo-33484882.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Road construction worker cutting asphalt for public road repairs">
+                </div>
+                <div class="mission-photo bottom">
+                    <img src="https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Freshly repaired road surface with clear lane markings">
+                </div>
+            </div>
+        </div>
+
+        <div class="values-section reveal">
+            <h2>Our Core Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h4>Transparency</h4>
+                    <p>Every report stays visible, creating trust and accountability across the civic process.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h4>Speed</h4>
+                    <p>Issues reported in seconds reach dispatchers instantly, significantly reducing SLA breaches.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fa-solid fa-users"></i>
+                    <h4>Community</h4>
+                    <p>We believe active citizens transform silent complaints into actionable community triumphs.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fa-solid fa-leaf"></i>
+                    <h4>Sustainability</h4>
+                    <p>Fixing issues promptly reduces secondary damage and leads to a more sustainable urban transit grid.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-section reveal">
+            <h2>The Team Behind RoadFix</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Raj Kumar portrait"></div>
+                    <h4>Raj Kumar</h4>
+                    <div class="role">Chief Inspector</div>
+                    <p>Oversees the dispatch routing to ensure issues are resolved.</p>
+                </div>
+                <div class="team-card">
+                    <div class="avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Alice Administrator portrait"></div>
+                    <h4>Alice Administrator</h4>
+                    <div class="role">Platform Director</div>
+                    <p>Ensures smooth operation scaling from 1 city to 100.</p>
+                </div>
+                <div class="team-card">
+                    <div class="avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=400&q=80" alt="Priya Singh portrait"></div>
+                    <h4>Priya Singh</h4>
+                    <div class="role">Community Lead</div>
+                    <p>Works directly with citizens to promote active participation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container footer-content footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="footer-logo"><i class="fa-solid fa-road"></i> RoadFix</a>
+                <p class="footer-tagline">Smarter road reporting for safer, stronger communities.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">How It Works</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <a href="dashboard.html">Pothole</a>
+                <a href="dashboard.html">Drain</a>
+                <a href="dashboard.html">Flooding</a>
+                <a href="dashboard.html">Streetlight</a>
+            </div>
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <p>support@roadfix.org</p>
+                <p>+91 00000 00000</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 RoadFix. Made with care for better roads.</p></div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const revealEls = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            revealEls.forEach((el, idx) => {
+                el.style.transitionDelay = `${idx * 90}ms`;
+                revealObserver.observe(el);
+            });
+
+            const statEl = document.getElementById('live-stat-reports');
+            if (!statEl) return;
+            try {
+                const res = await fetch('/api/reports/stats');
+                const data = await res.json();
+                let total = 0;
+                if (res.ok && data.success && Array.isArray(data.data)) {
+                    total = data.data.reduce((sum, item) => sum + (item.count || 0), 0);
+                }
+                statEl.textContent = total > 0 ? total.toLocaleString() : "2,543";
+            } catch(e) {
+                statEl.textContent = "2,543";
+            }
+        });
+    </script>
+<script src="js/navbar.js"></script>
+</body>
+</html>

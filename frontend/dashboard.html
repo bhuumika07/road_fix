@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RoadFix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="light">
+    <!-- Navbar -->
+        <!-- UNIVERSAL NAVBAR -->
+    <nav class="navbar" id="main-navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <i class="fa-solid fa-road"></i>
+          <span>RoadFix</span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" data-page="index"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="about.html" data-page="about"><i class="fa-solid fa-circle-info"></i> About</a></li>
+          <li><a href="report.html" data-page="report"><i class="fa-solid fa-plus"></i> Report Issue</a></li>
+          <li><a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-bar"></i> Dashboard</a></li>
+          <li class="admin-only" style="display:none"><a href="audit.html" data-page="audit"><i class="fa-solid fa-shield-halved"></i> Audit Log</a></li>
+          <li><a href="faq.html" data-page="faq"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+          <li><a href="contact.html" data-page="contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+        
+        <div class="nav-right">
+          <div class="user-info auth-only" style="display:none">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-details">
+              <span class="user-name" id="nav-user-name">User</span>
+              <span class="user-role-badge" id="nav-role-badge">citizen</span>
+            </div>
+          </div>
+          <button class="btn-icon auth-only" id="logout-btn" style="display:none" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="padding-top: 32px; padding-bottom: 60px;">
+        <!-- Header -->
+        <div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
+            <div>
+                <h1 style="font-size: 2rem; font-weight:800; color:var(--text-primary); letter-spacing:-0.02em;">Community Dashboard.</h1>
+                <p style="color:var(--text-muted); font-size:1rem;">View, manage and resolve reported road maintenance issues.</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button id="toggle-filters" class="btn-icon" title="Toggle Filters" style="width:auto !important; height:auto !important; padding:10px 20px !important; gap:8px; display:flex; align-items:center; cursor:pointer !important; font-weight:700;">
+                    <i class="fa-solid fa-sliders"></i> Filters
+                </button>
+                <button id="export-csv" class="btn-secondary-hero admin-only hidden" style="padding: 10px 20px; border-radius:var(--radius-md); font-size:0.9rem; font-weight:700;">
+                    <i class="fa-solid fa-file-csv"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <!-- Filter bar -->
+        <div class="filter-bar" id="filter-bar" style="background:var(--bg-card); padding:20px; margin-bottom: 24px; border-radius:var(--radius-md); box-shadow:var(--shadow-lg); display:none; opacity:0; transform:translateY(-10px); gap:16px; flex-wrap:wrap; align-items:center; position:relative; border: 1px solid var(--border); transition: all 0.3s ease-out;">
+            <div class="input-wrapper" style="flex:1; min-width:200px; position:relative;">
+                <i class="fa-solid fa-magnifying-glass input-icon" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--text-muted);"></i>
+                <input type="text" id="search-input" placeholder="Search reports..." style="width:100%; padding:12px 16px 12px 42px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:var(--input-bg); color:var(--text-primary); font-family:'Outfit'; font-size:0.95rem; box-shadow:inset 0 2px 4px rgba(0,0,0,0.02); transition: var(--transition);">
+            </div>
+            <select id="filter-category" style="padding:12px 16px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:var(--input-bg); color:var(--text-primary); font-family:'Outfit'; font-size:0.95rem; transition: var(--transition); cursor:pointer;">
+                <option value="all">All Categories</option>
+                <option value="Pothole">Pothole</option>
+                <option value="Streetlight">Streetlight</option>
+                <option value="Sidewalk">Sidewalk</option>
+                <option value="Flooding">Flooding</option>
+                <option value="Other">Other</option>
+            </select>
+            <select id="filter-status" style="padding:12px 16px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:var(--input-bg); color:var(--text-primary); font-family:'Outfit'; font-size:0.95rem; transition: var(--transition); cursor:pointer;">
+                <option value="all">All Statuses</option>
+                <option value="Reported">Reported</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+            <select id="sort-order" style="padding:12px 16px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:var(--input-bg); color:var(--text-primary); font-family:'Outfit'; font-size:0.95rem; transition: var(--transition); cursor:pointer;">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="upvotes">Most Upvoted</option>
+            </select>
+        </div>
+        <div id="filter-badge" class="hidden" style="margin-top:12px; font-size:0.85rem; color:#3b82f6; font-weight:600;"><i class="fa-solid fa-filter"></i> <span id="filter-count"></span></div>
+
+        <!-- Reports Grid -->
+        <div id="reports-container" class="reports-grid">
+            <!-- Rendered via JS -->
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; display:flex; justify-content:center; align-items:center;">
+        <button id="close-modal" style="position:absolute; top:24px; right:24px; background:none; border:none; color:white; font-size:2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        <img id="modal-img" src="" style="max-width:90%; max-height:90%; border-radius:8px; object-fit:contain; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

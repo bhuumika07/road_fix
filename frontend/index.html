@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadFix - Smarter Infrastructure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="light">
+    <!-- Navbar -->
+        <!-- UNIVERSAL NAVBAR -->
+    <nav class="navbar" id="main-navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <i class="fa-solid fa-road"></i>
+          <span>RoadFix</span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" data-page="index">Home</a></li>
+          <li><a href="about.html" data-page="about">About</a></li>
+          <li><a href="dashboard.html" data-page="dashboard">Issues</a></li>
+          <li><a href="faq.html" data-page="faq">How It Works</a></li>
+          <li><a href="contact.html" data-page="contact">Contact</a></li>
+          <li class="admin-only" style="display:none"><a href="audit.html" data-page="audit">Audit Log</a></li>
+        </ul>
+        
+        <div class="nav-right">
+          <div class="user-info auth-only" style="display:none">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-details">
+              <span class="user-name" id="nav-user-name">User</span>
+              <span class="user-role-badge" id="nav-role-badge">citizen</span>
+            </div>
+          </div>
+          <a href="report.html" class="btn-report-now"><i class="fa-solid fa-flag"></i> Report Now</a>
+          <button class="btn-icon auth-only" id="logout-btn" style="display:none" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-doodle hero-doodle-wave"><i class="fa-solid fa-road"></i></div>
+        <div class="hero-doodle hero-doodle-star"><i class="fa-solid fa-star"></i></div>
+        <div class="hero-doodle hero-doodle-hand"><i class="fa-solid fa-hands-holding-child"></i></div>
+        <div class="container hero-content">
+            <div class="hero-copy">
+                <p class="hero-label">Fix Roads, Build Communities</p>
+                <h1 class="hero-title">
+                    Report Roads, <span class="accent">Save Lives</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Help your city fix potholes, broken drains, and road hazards. One report makes a difference.
+                </p>
+                <div class="hero-buttons">
+                    <a href="report.html" class="btn-primary-hero">Report a Problem <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#" class="btn-video-hero" aria-label="Play explainer video"><i class="fa-solid fa-play"></i></a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1100&q=80" alt="Damaged road and pothole needing urgent repair">
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container stats-grid">
+            <div class="stat-card stat-blue">
+                <i class="fa-solid fa-flag"></i>
+                <h3 id="stat-reported">0</h3>
+                <p>Issues Reported</p>
+            </div>
+            <div class="stat-card stat-green">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3 id="stat-fixed">0</h3>
+                <p>Roads Fixed</p>
+            </div>
+            <div class="stat-card stat-purple">
+                <i class="fa-solid fa-users"></i>
+                <h3 id="stat-citizens">5,200</h3>
+                <p>Active Citizens</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-roadfix-section">
+        <div class="container about-roadfix-grid">
+            <div class="about-roadfix-media">
+                <div class="about-brush"></div>
+                <div class="about-photo photo-main">
+                    <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&w=1000&q=80" alt="Broken city road reported by a citizen">
+                </div>
+                <div class="about-photo photo-top">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=700&q=80" alt="Community members discussing local road repairs">
+                </div>
+                <div class="about-photo photo-bottom">
+                    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80" alt="Road repair workers fixing a damaged street">
+                </div>
+                <span class="about-dot dot-one"></span>
+                <span class="about-dot dot-two"></span>
+            </div>
+            <div class="about-roadfix-content">
+                <p class="about-roadfix-label">Welcome to RoadFix</p>
+                <h2>Transforming Roads, One Report At A Time</h2>
+                <p class="about-roadfix-text">
+                    RoadFix empowers citizens to flag road hazards instantly, helping local teams prioritize repairs with transparency and speed.
+                </p>
+                <div class="about-feature-row">
+                    <div class="about-feature-icon"><i class="fa-solid fa-people-group"></i></div>
+                    <div>
+                        <h3>Community Reporting</h3>
+                        <p>Citizens submit verified road issues with photos, exact location, and context in minutes.</p>
+                    </div>
+                </div>
+                <div class="about-feature-row">
+                    <div class="about-feature-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <div>
+                        <h3>Track Your Complaint</h3>
+                        <p>Follow each complaint from open to resolved with timeline updates and civic accountability.</p>
+                    </div>
+                </div>
+                <a href="about.html" class="btn-about-more">About More <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-banner">
+                <i class="fa-solid fa-road cta-doodle cta-doodle-road"></i>
+                <i class="fa-solid fa-triangle-exclamation cta-doodle cta-doodle-alert"></i>
+                <h2>Ready to Make Your Road Safer?</h2>
+                <p>Join thousands of citizens already reporting issues in their city.</p>
+                <div class="cta-actions">
+                    <a href="report.html" class="btn-cta btn-cta-primary">Report a Problem</a>
+                    <a href="faq.html" class="btn-cta btn-cta-ghost">Learn How It Works</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-content footer-grid">
+            <div class="footer-col">
+                <a href="index.html" class="footer-logo"><i class="fa-solid fa-road"></i> RoadFix</a>
+                <p class="footer-tagline">Smarter road reporting for safer, stronger communities.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">How It Works</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <a href="dashboard.html">Pothole</a>
+                <a href="dashboard.html">Drain</a>
+                <a href="dashboard.html">Flooding</a>
+                <a href="dashboard.html">Streetlight</a>
+            </div>
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <p>support@roadfix.org</p>
+                <p>+91 00000 00000</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 RoadFix. Made with care for better roads.</p>
+        </div>
+    </footer>
+
+    <script src="js/navbar.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

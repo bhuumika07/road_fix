@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequently Asked Questions - RoadFix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="light">
+    <!-- Navbar -->
+        <!-- UNIVERSAL NAVBAR -->
+    <nav class="navbar" id="main-navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <i class="fa-solid fa-road"></i>
+          <span>RoadFix</span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="index.html" data-page="index"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li><a href="about.html" data-page="about"><i class="fa-solid fa-circle-info"></i> About</a></li>
+          <li><a href="report.html" data-page="report"><i class="fa-solid fa-plus"></i> Report Issue</a></li>
+          <li><a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-bar"></i> Dashboard</a></li>
+          <li class="admin-only" style="display:none"><a href="audit.html" data-page="audit"><i class="fa-solid fa-shield-halved"></i> Audit Log</a></li>
+          <li><a href="faq.html" data-page="faq"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+          <li><a href="contact.html" data-page="contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+        
+        <div class="nav-right">
+          <div class="user-info auth-only" style="display:none">
+            <div class="user-avatar" id="user-avatar">U</div>
+            <div class="user-details">
+              <span class="user-name" id="nav-user-name">User</span>
+              <span class="user-role-badge" id="nav-role-badge">citizen</span>
+            </div>
+          </div>
+          <button class="btn-icon auth-only" id="logout-btn" style="display:none" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="max-width: 800px; padding-top: 60px; padding-bottom: 80px;">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 16px;">Frequently Asked Questions</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">Everything you need to know about tracking, reporting, and utilizing RoadFix in your community.</p>
+        </div>
+
+        <div class="input-wrapper" style="margin-bottom: 40px;">
+            <i class="fa-solid fa-magnifying-glass input-icon" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 1.1rem;"></i>
+            <input type="text" id="faq-search" placeholder="Search a question..." style="width: 100%; padding: 16px 16px 16px 48px; border-radius: 12px; border: 2px solid #e5e7eb; font-family: 'Outfit'; font-size: 1.05rem; background: var(--input-bg); color: var(--text-primary); outline: none; transition: border-color 0.2s; box-sizing: border-box;">
+        </div>
+
+        <div id="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">How do I report a road issue? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Navigate to "Report Issue", fill the form, drop a map pin, and submit.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I track my report status? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Yes, each report gets a tracking ID. Check the dashboard anytime.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Who receives my reports? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Reports are visible to all inspectors and admins who manage resolution.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is my personal data safe? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">We only collect location and issue data needed to fix the problem. Private identity markers are not public.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How long does it take to resolve? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Depends on category. Blocked drains: 3 days, potholes: 7 days typically based on SLAs.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I report anonymously? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Currently we require a citizen login for accountability, but no public ID is shown on the dashboard publicly.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What areas does RoadFix cover? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">RoadFix is a platform configured per municipality. Usually, city limits and surrounding suburbs are fully covered.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How do I contact support? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+                <div class="faq-answer">Use the Contact page form or email our helpdesk at support@roadfix.com directly.</div>
+            </div>
+        </div>
+
+        <div id="faq-no-results" class="hidden" style="margin-top: 20px; padding: 24px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-card); box-shadow: var(--shadow-sm);">
+            <h3 style="margin: 0 0 8px; color: var(--text-primary); font-size: 1.2rem; font-weight: 700;">
+                We could not find that question yet
+            </h3>
+            <p style="margin: 0 0 16px; color: var(--text-muted); line-height: 1.6;">
+                Try one of these common help paths so you still get an answer quickly:
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                <button type="button" class="btn-secondary-hero" data-faq-suggest="track status">Track report status</button>
+                <button type="button" class="btn-secondary-hero" data-faq-suggest="report issue">How to report an issue</button>
+                <button type="button" class="btn-secondary-hero" data-faq-suggest="contact support">Contact support</button>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <a href="report.html" class="btn-primary-hero"><i class="fa-solid fa-plus"></i> Report an Issue</a>
+                <a href="dashboard.html" class="btn-secondary-hero"><i class="fa-solid fa-chart-line"></i> View Dashboard</a>
+                <a href="contact.html" class="btn-secondary-hero"><i class="fa-solid fa-envelope"></i> Ask Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-left">
+                <a href="index.html" class="footer-logo"><i class="fa-solid fa-road"></i> RoadFix</a>
+                <p class="footer-tagline">Smarter Infrastructure. Better Cities.</p>
+            </div>
+            <div class="footer-right">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="contact.html">Contact</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 RoadFix</p></div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('userRole');
+            const name = localStorage.getItem('userName');
+            if (role) {
+                const navUserName = document.getElementById('nav-user-name');
+                const roleBadge = document.getElementById('nav-role-badge');
+                if (navUserName) navUserName.textContent = name || 'User';
+                if (roleBadge) {
+                    roleBadge.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+                }
+                document.querySelectorAll('.auth-only').forEach(el => el.style.display = '');
+                if (role === 'admin') document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+            }
+
+            document.getElementById('logout-btn').addEventListener('click', async () => {
+                try { await fetch('/api/auth/logout', { method: 'POST' }); } catch(e) {}
+                localStorage.clear();
+                window.location.href = 'login.html';
+            });
+
+            const searchInput = document.getElementById('faq-search');
+            const noResultsBox = document.getElementById('faq-no-results');
+            searchInput.addEventListener('focus', () => searchInput.style.borderColor = '#3b82f6');
+            searchInput.addEventListener('blur', () => searchInput.style.borderColor = '#e5e7eb');
+
+            const items = document.querySelectorAll('.faq-item');
+            items.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const isOpen = item.classList.contains('open');
+                    items.forEach(i => i.classList.remove('open'));
+                    if(!isOpen) item.classList.add('open');
+                });
+            });
+
+            const applyFaqFilter = (term) => {
+                const normalizedTerm = (term || '').toLowerCase();
+                let visibleCount = 0;
+                items.forEach(item => {
+                    const q = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const a = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    if(q.includes(normalizedTerm) || a.includes(normalizedTerm)) {
+                        item.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (noResultsBox) {
+                    noResultsBox.classList.toggle('hidden', normalizedTerm.length === 0 || visibleCount > 0);
+                }
+            };
+
+            searchInput.addEventListener('input', (e) => {
+                applyFaqFilter(e.target.value.toLowerCase());
+            });
+
+            document.querySelectorAll('[data-faq-suggest]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const suggestion = btn.getAttribute('data-faq-suggest') || '';
+                    searchInput.value = suggestion;
+                    applyFaqFilter(suggestion.toLowerCase());
+                    searchInput.focus();
+                });
+            });
+        });
+    </script>
+<script src="js/navbar.js"></script>
+</body>
+</html>
