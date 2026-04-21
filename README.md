@@ -152,7 +152,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👩‍💻 Author
 
-**Rashmi Joshi --**
+**Rashmi Joshi**
 - GitHub: [@Rashmijoshi18](https://github.com/Rashmijoshi18)
 
 ---
