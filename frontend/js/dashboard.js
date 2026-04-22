@@ -5,6 +5,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Dashboard State
     let allReports = [];
+    const commentsByReport = {};
+    const updatesByReport = {};
+    const detailsLoaded = {};
+    const appendUniqueEntry = (store, reportId, entry) => {
+        if (!store[reportId]) store[reportId] = [];
+        if (!store[reportId].some((item) => item.id === entry.id)) {
+            store[reportId].push(entry);
+        }
+    };
     const container = document.getElementById('reports-container');
     const searchInput = document.getElementById('search-input');
     const filterCat = document.getElementById('filter-category');
@@ -72,6 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(countBadge) countBadge.textContent = data.upvotes;
             }
         }
+    });
+
+    socket.on('report:commented', ({ reportId, comment }) => {
+        if (!reportId || !comment) return;
+        appendUniqueEntry(commentsByReport, reportId, comment);
+        renderDiscussion(reportId);
+    });
+
+    socket.on('report:updated_note', ({ reportId, update }) => {
+        if (!reportId || !update) return;
+        appendUniqueEntry(updatesByReport, reportId, update);
+        renderDiscussion(reportId);
     });
 
     const renderSkeleton = () => {
@@ -195,6 +216,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="font-size:0.86rem; color:var(--text-secondary);">
                             <strong>Full Description:</strong> ${r.description}
                         </div>
+                        <hr style="border:none; border-top:1px solid var(--border); margin:12px 0;">
+                        <div style="font-size:0.95rem; font-weight:700; color:var(--text-primary); margin-bottom:8px;">
+                            Community Comments
+                        </div>
+                        <div id="comments-list-${r.id}" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+                        <div style="display:flex; gap:8px; margin-bottom:12px;">
+                            <input id="comment-input-${r.id}" type="text" maxlength="300" placeholder="Add local context..." style="flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--input-bg); color:var(--text-primary);">
+                            <button onclick="postComment('${r.id}')" class="btn-secondary-hero" style="padding:8px 12px;">Post</button>
+                        </div>
+                        <div id="comment-error-${r.id}" style="display:none; margin:-6px 0 12px; font-size:0.82rem; color:#ef4444;"></div>
+
+                        <div style="font-size:0.95rem; font-weight:700; color:var(--text-primary); margin-bottom:8px;">
+                            Official Progress Updates
+                        </div>
+                        <div id="updates-list-${r.id}" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
+                        ${(role === 'admin' || role === 'inspector') ? `
+                            <div style="display:flex; gap:8px;">
+                                <input id="update-input-${r.id}" type="text" maxlength="300" placeholder="Post a progress update..." style="flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--input-bg); color:var(--text-primary);">
+                                <button onclick="postOfficialUpdate('${r.id}')" class="btn-primary-hero" style="padding:8px 12px;">Update</button>
+                            </div>
+                            <div id="update-error-${r.id}" style="display:none; margin:6px 0 0; font-size:0.82rem; color:#ef4444;"></div>
+                        ` : `
+                            <div style="font-size:0.82rem; color:var(--text-muted);">Only admins and inspectors can post updates.</div>
+                        `}
                     </div>
                     <div class="report-admin-actions">
                         ${(role === 'admin' || role === 'inspector') ? `
@@ -224,6 +269,172 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!details) return;
         const isOpen = details.style.display === 'block';
         details.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen && !detailsLoaded[id]) {
+            detailsLoaded[id] = true;
+            loadDiscussion(id);
+        }
+    };
+
+    const getAuthorLabel = (entry) => {
+        const authorName = entry?.author?.name || 'Unknown';
+        const authorRole = entry?.author?.role || 'unknown';
+        return `${authorName} (${authorRole})`;
+    };
+
+    const renderDiscussion = (reportId) => {
+        const commentsList = document.getElementById(`comments-list-${reportId}`);
+        const updatesList = document.getElementById(`updates-list-${reportId}`);
+        if (!commentsList || !updatesList) return;
+
+        const comments = commentsByReport[reportId] || [];
+        const updates = updatesByReport[reportId] || [];
+
+        commentsList.innerHTML = comments.length
+            ? comments.map((item) => `
+                <div style="padding:8px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card);">
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px;">${getAuthorLabel(item)} • ${new Date(item.createdAt).toLocaleString()}</div>
+                    <div style="font-size:0.88rem; color:var(--text-secondary);">${item.text}</div>
+                </div>
+            `).join('')
+            : `<div style="font-size:0.82rem; color:var(--text-muted);">No comments yet.</div>`;
+
+        updatesList.innerHTML = updates.length
+            ? updates.map((item) => `
+                <div style="padding:8px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card);">
+                    <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:4px;">${getAuthorLabel(item)} • ${new Date(item.createdAt).toLocaleString()}</div>
+                    <div style="font-size:0.88rem; color:var(--text-secondary);">${item.text}</div>
+                </div>
+            `).join('')
+            : `<div style="font-size:0.82rem; color:var(--text-muted);">No official updates yet.</div>`;
+    };
+
+    const setInlineError = (type, reportId, message) => {
+        const el = document.getElementById(`${type}-error-${reportId}`);
+        if (!el) return;
+        if (!message) {
+            el.textContent = '';
+            el.style.display = 'none';
+            return;
+        }
+        el.textContent = message;
+        el.style.display = 'block';
+    };
+
+    const parseApiResponse = async (response) => {
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            return response.json();
+        }
+
+        const text = await response.text();
+        return {
+            success: false,
+            error: text.includes('Cannot')
+                ? 'Endpoint not available. Restart backend server to load latest routes.'
+                : `Unexpected server response (${response.status}).`
+        };
+    };
+
+    const loadDiscussion = async (reportId) => {
+        try {
+            setInlineError('comment', reportId, '');
+            setInlineError('update', reportId, '');
+            const [commentsRes, updatesRes] = await Promise.all([
+                fetch(`/api/reports/${reportId}/comments`, {
+                    headers: {
+                        'x-user-role': role || 'unknown',
+                        'x-user-id': userId || 'unknown',
+                        'x-user-name': name || 'Unknown'
+                    }
+                }),
+                fetch(`/api/reports/${reportId}/updates`, {
+                    headers: {
+                        'x-user-role': role || 'unknown',
+                        'x-user-id': userId || 'unknown',
+                        'x-user-name': name || 'Unknown'
+                    }
+                })
+            ]);
+
+            const commentsData = await parseApiResponse(commentsRes);
+            const updatesData = await parseApiResponse(updatesRes);
+
+            commentsByReport[reportId] = commentsData.success ? commentsData.data : [];
+            updatesByReport[reportId] = updatesData.success ? updatesData.data : [];
+            renderDiscussion(reportId);
+        } catch (error) {
+            commentsByReport[reportId] = [];
+            updatesByReport[reportId] = [];
+            renderDiscussion(reportId);
+            setInlineError('comment', reportId, 'Could not load comments right now.');
+            setInlineError('update', reportId, 'Could not load updates right now.');
+        }
+    };
+
+    window.postComment = async (reportId) => {
+        const input = document.getElementById(`comment-input-${reportId}`);
+        if (!input) return;
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+            setInlineError('comment', reportId, '');
+            const res = await fetch(`/api/reports/${reportId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-user-role': role || 'unknown',
+                    'x-user-id': userId || 'unknown',
+                    'x-user-name': name || 'Unknown'
+                },
+                body: JSON.stringify({ text })
+            });
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) {
+                setInlineError('comment', reportId, data.error || 'Failed to post comment.');
+                if (window.showToast) window.showToast(data.error || 'Failed to post comment', 'error');
+                return;
+            }
+            appendUniqueEntry(commentsByReport, reportId, data.data);
+            input.value = '';
+            renderDiscussion(reportId);
+        } catch (error) {
+            setInlineError('comment', reportId, 'Network error while posting comment.');
+            if (window.showToast) window.showToast('Network error', 'error');
+        }
+    };
+
+    window.postOfficialUpdate = async (reportId) => {
+        const input = document.getElementById(`update-input-${reportId}`);
+        if (!input) return;
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+            setInlineError('update', reportId, '');
+            const res = await fetch(`/api/reports/${reportId}/updates`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-user-role': role || 'unknown',
+                    'x-user-id': userId || 'unknown',
+                    'x-user-name': name || 'Unknown'
+                },
+                body: JSON.stringify({ text })
+            });
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) {
+                setInlineError('update', reportId, data.error || 'Failed to post update.');
+                if (window.showToast) window.showToast(data.error || 'Failed to post update', 'error');
+                return;
+            }
+            appendUniqueEntry(updatesByReport, reportId, data.data);
+            input.value = '';
+            renderDiscussion(reportId);
+        } catch (error) {
+            setInlineError('update', reportId, 'Network error while posting update.');
+            if (window.showToast) window.showToast('Network error', 'error');
+        }
     };
 
     window.toggleUpvote = async (id) => {

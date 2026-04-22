@@ -67,13 +67,17 @@ async function fetchAndRenderLogs() {
                 'x-user-role': localStorage.getItem('userRole')
             }
         });
-        const data = await response.json();
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+            ? await response.json()
+            : { success: false, error: await response.text() };
         
         if (response.ok && data.success) {
             allLogs = data.data;
             renderTimeline(allLogs);
         } else {
-            timeline.innerHTML = `<div class="message error">Failed to load audit logs: ${data.error}</div>`;
+            const msg = data.error || data.message || 'Failed to load audit logs.';
+            timeline.innerHTML = `<div class="message error">Failed to load audit logs: ${msg}</div>`;
         }
     } catch (err) {
         console.error(err);

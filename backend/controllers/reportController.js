@@ -1,5 +1,11 @@
 const db = require('../db/database');
 const { appendAuditLog } = require('../db/auditDatabase');
+const {
+    addComment,
+    addOfficialUpdate,
+    getCommentsByReportId,
+    getUpdatesByReportId
+} = require('../db/communityDatabase');
 
 let io;
 const setIO = (socketIO) => { io = socketIO; };
@@ -9,6 +15,14 @@ const getActor = (req) => ({
     name: req.headers['x-user-name'] || 'Unknown User',
     role: req.headers['x-user-role'] || 'unknown'
 });
+
+const reportExists = (reportId, callback) => {
+    db.all('SELECT * FROM reports', [], (err, rows) => {
+        if (err) return callback(err);
+        const found = rows.find((r) => r.id.toString() === reportId.toString());
+        callback(null, found);
+    });
+};
 
 const getReports = (req, res) => {
     const { category, status } = req.query;
@@ -160,6 +174,92 @@ const getReportStats = (req, res) => {
     });
 };
 
+const getReportComments = (req, res) => {
+    const { id } = req.params;
+    reportExists(id, (err, foundReport) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        if (!foundReport) return res.status(404).json({ success: false, error: 'Report not found' });
+
+        const comments = getCommentsByReportId(id);
+        return res.json({ success: true, data: comments });
+    });
+};
+
+const createReportComment = (req, res) => {
+    const { id } = req.params;
+    const { text } = req.body || {};
+    if (!text || !text.trim()) {
+        return res.status(400).json({ success: false, error: 'Comment text is required.' });
+    }
+
+    reportExists(id, (err, foundReport) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        if (!foundReport) return res.status(404).json({ success: false, error: 'Report not found' });
+
+        const actor = getActor(req);
+        const comment = addComment({
+            reportId: id,
+            text: text.trim(),
+            author: actor
+        });
+
+        appendAuditLog({
+            action: 'report.comment_added',
+            actor,
+            reportId: id.toString(),
+            details: `Comment added to report #${id}`
+        });
+
+        if (io) io.emit('report:commented', { reportId: id.toString(), comment });
+        return res.status(201).json({ success: true, data: comment });
+    });
+};
+
+const getReportUpdates = (req, res) => {
+    const { id } = req.params;
+    reportExists(id, (err, foundReport) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        if (!foundReport) return res.status(404).json({ success: false, error: 'Report not found' });
+
+        const updates = getUpdatesByReportId(id);
+        return res.json({ success: true, data: updates });
+    });
+};
+
+const createReportUpdate = (req, res) => {
+    const { id } = req.params;
+    const { text } = req.body || {};
+    const actor = getActor(req);
+
+    if (!['admin', 'inspector'].includes(actor.role)) {
+        return res.status(403).json({ success: false, error: 'Only officials can post updates.' });
+    }
+    if (!text || !text.trim()) {
+        return res.status(400).json({ success: false, error: 'Update text is required.' });
+    }
+
+    reportExists(id, (err, foundReport) => {
+        if (err) return res.status(500).json({ success: false, error: err.message });
+        if (!foundReport) return res.status(404).json({ success: false, error: 'Report not found' });
+
+        const update = addOfficialUpdate({
+            reportId: id,
+            text: text.trim(),
+            author: actor
+        });
+
+        appendAuditLog({
+            action: 'report.update_posted',
+            actor,
+            reportId: id.toString(),
+            details: `Official update posted for report #${id}`
+        });
+
+        if (io) io.emit('report:updated_note', { reportId: id.toString(), update });
+        return res.status(201).json({ success: true, data: update });
+    });
+};
+
 const deleteReport = (req, res) => {
     const { id } = req.params;
     const sql = `DELETE FROM reports WHERE id = ?`;
@@ -187,5 +287,9 @@ module.exports = {
     updateReportStatus,
     getReportStats,
     deleteReport,
-    upvoteReport
+    upvoteReport,
+    getReportComments,
+    createReportComment,
+    getReportUpdates,
+    createReportUpdate
 };

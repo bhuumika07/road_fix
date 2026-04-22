@@ -8,7 +8,11 @@ const {
     updateReportStatus,
     getReportStats,
     deleteReport,
-    upvoteReport
+    upvoteReport,
+    getReportComments,
+    createReportComment,
+    getReportUpdates,
+    createReportUpdate
 } = require('../controllers/reportController');
 
 // Multer Storage Configuration
@@ -32,6 +36,10 @@ router.get('/', getReports);
 router.post('/', upload.single('image'), createReport); 
 router.patch('/:id/status', updateReportStatus);
 router.patch('/:id/upvote', upvoteReport);
+router.get('/:id/comments', getReportComments);
+router.post('/:id/comments', createReportComment);
+router.get('/:id/updates', getReportUpdates);
+router.post('/:id/updates', createReportUpdate);
 router.delete('/:id', deleteReport);
 router.get('/stats', getReportStats);
 

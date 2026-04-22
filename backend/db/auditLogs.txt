@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1776836217005",
+    "action": "report.created",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "1",
+    "details": "Report #1 titled 'pothole' submitted in category Pothole",
+    "timestamp": "2026-04-22T05:36:57.005Z"
+  },
+  {
+    "id": "1776836725788",
+    "action": "report.comment_added",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "1",
+    "details": "Comment added to report #1",
+    "timestamp": "2026-04-22T05:45:25.788Z"
+  },
+  {
+    "id": "1776836753951",
+    "action": "report.update_posted",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "1",
+    "details": "Official update posted for report #1",
+    "timestamp": "2026-04-22T05:45:53.951Z"
+  },
+  {
+    "id": "1776836759876",
+    "action": "report.status_changed",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "1",
+    "details": "Status changed from Reported to In Progress for report #1",
+    "timestamp": "2026-04-22T05:45:59.876Z"
+  },
+  {
+    "id": "1776848655192",
+    "action": "report.created",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "2",
+    "details": "Report #2 titled 'blocked drain due to recent  rainy weather' submitted in category Blocked Drain",
+    "timestamp": "2026-04-22T09:04:15.192Z"
+  },
+  {
+    "id": "1776848713719",
+    "action": "report.comment_added",
+    "actor": {
+      "id": "user2",
+      "name": "Raj Kumar",
+      "role": "inspector"
+    },
+    "reportId": "2",
+    "details": "Comment added to report #2",
+    "timestamp": "2026-04-22T09:05:13.720Z"
+  },
+  {
+    "id": "1776850260831",
+    "action": "report.created",
+    "actor": {
+      "id": "user3",
+      "name": "Priya Singh",
+      "role": "citizen"
+    },
+    "reportId": "3",
+    "details": "Report #3 titled 'Broken Streetlight ' submitted in category Streetlight Issue",
+    "timestamp": "2026-04-22T09:31:00.831Z"
+  },
+  {
+    "id": "1776851501034",
+    "action": "report.comment_added",
+    "actor": {
+      "id": "user3",
+      "name": "Priya Singh",
+      "role": "citizen"
+    },
+    "reportId": "3",
+    "details": "Comment added to report #3",
+    "timestamp": "2026-04-22T09:51:41.034Z"
+  },
+  {
+    "id": "1776851688402",
+    "action": "report.status_changed",
+    "actor": {
+      "id": "user1",
+      "name": "Admin User",
+      "role": "admin"
+    },
+    "reportId": "3",
+    "details": "Status changed from Reported to Reported for report #3",
+    "timestamp": "2026-04-22T09:54:48.402Z"
+  }
+]

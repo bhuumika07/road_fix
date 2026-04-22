@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "id": "comment-1776836725785-837379",
+      "reportId": "1",
+      "text": "Please fix it ASAP",
+      "author": {
+        "id": "user2",
+        "name": "Raj Kumar",
+        "role": "inspector"
+      },
+      "createdAt": "2026-04-22T05:45:25.785Z"
+    },
+    {
+      "id": "comment-1776848713716-779370",
+      "reportId": "2",
+      "text": "Please fix it , or children will catch the germs .",
+      "author": {
+        "id": "user2",
+        "name": "Raj Kumar",
+        "role": "inspector"
+      },
+      "createdAt": "2026-04-22T09:05:13.716Z"
+    },
+    {
+      "id": "comment-1776851501028-849541",
+      "reportId": "3",
+      "text": "fix it ASAP!!!",
+      "author": {
+        "id": "user3",
+        "name": "Priya Singh",
+        "role": "citizen"
+      },
+      "createdAt": "2026-04-22T09:51:41.029Z"
+    }
+  ],
+  "updates": [
+    {
+      "id": "update-1776836753948-464980",
+      "reportId": "1",
+      "text": "Its under maintenance, we will fix it by next week.",
+      "author": {
+        "id": "user2",
+        "name": "Raj Kumar",
+        "role": "inspector"
+      },
+      "createdAt": "2026-04-22T05:45:53.948Z"
+    }
+  ]
+}
