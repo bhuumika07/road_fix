@@ -80,8 +80,13 @@ async function fetchAndRenderLogs() {
             timeline.innerHTML = `<div class="message error">Failed to load audit logs: ${msg}</div>`;
         }
     } catch (err) {
-        console.error(err);
-        timeline.innerHTML = `<div class="message error">Network error while fetching audit logs.</div>`;
+        console.error("Audit Fetch/Render Error:", err);
+        const isNetwork = err.name === 'TypeError';
+        timeline.innerHTML = `
+            <div class="message error">
+                ${isNetwork ? 'Network error: Backend server might be down.' : 'Internal rendering error.'}
+                <br><small style="opacity:0.7">${err.message}</small>
+            </div>`;
     } finally {
         loader.style.display = 'none';
     }
@@ -96,13 +101,21 @@ function renderTimeline(logs) {
     }
 
     timeline.innerHTML = logs.map(log => {
-        const dateObj = new Date(log.timestamp);
+        const dateValue = log.createdAt || log.timestamp || new Date();
+        const dateObj = new Date(dateValue);
+        
         // Format: "15 Apr 2026, 10:32 AM"
         const formatter = new Intl.DateTimeFormat('en-GB', {
             day: 'numeric', month: 'short', year: 'numeric',
             hour: '2-digit', minute: '2-digit', hour12: true
         });
-        const formattedTime = formatter.format(dateObj);
+
+        let formattedTime = "N/A";
+        try {
+            formattedTime = formatter.format(dateObj);
+        } catch (e) {
+            console.warn("Date formatting failed for:", dateValue);
+        }
         
         let iconClass = 'fas fa-info';
         let colorClass = 'icon-user-login'; // default

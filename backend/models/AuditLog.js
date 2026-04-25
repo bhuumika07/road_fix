@@ -8,7 +8,7 @@ const auditLogSchema = new mongoose.Schema({
         name: { type: String, required: true },
         role: { type: String, required: true }
     },
-    reportId: { type: String, required: true },
+    reportId: { type: String, required: false }, // Optional, not all logs are report-specific
     details: { type: String, required: true }
 }, { timestamps: true });
 
