@@ -5,6 +5,8 @@ const fs = require('fs');
 const http = require('http');
 const { Server } = require('socket.io');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
+const connectDB = require('./config/db');
 
 const authRoutes = require('./routes/authRoutes');
 const auditRoutes = require('./routes/auditRoutes');
@@ -36,6 +38,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Connect to Database
+connectDB();
 
 // Serve static frontend assets cleanly
 app.use(express.static(path.join(__dirname, '../frontend')));
