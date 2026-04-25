@@ -231,7 +231,7 @@ const createReportUpdate = (req, res) => {
     const { text } = req.body || {};
     const actor = getActor(req);
 
-    if (!['admin', 'inspector'].includes(actor.role)) {
+    if (actor.role !== 'admin') {
         return res.status(403).json({ success: false, error: 'Only officials can post updates.' });
     }
     if (!text || !text.trim()) {

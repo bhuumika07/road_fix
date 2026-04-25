@@ -7,7 +7,7 @@
       "author": {
         "id": "user2",
         "name": "Raj Kumar",
-        "role": "inspector"
+        "role": "admin"
       },
       "createdAt": "2026-04-22T05:45:25.785Z"
     },
@@ -18,7 +18,7 @@
       "author": {
         "id": "user2",
         "name": "Raj Kumar",
-        "role": "inspector"
+        "role": "admin"
       },
       "createdAt": "2026-04-22T09:05:13.716Z"
     },
@@ -32,6 +32,17 @@
         "role": "citizen"
       },
       "createdAt": "2026-04-22T09:51:41.029Z"
+    },
+    {
+      "id": "comment-1777019677841-417983",
+      "reportId": "3",
+      "text": "it is still not fixed, how long is it going to take",
+      "author": {
+        "id": "user3",
+        "name": "Priya Singh",
+        "role": "citizen"
+      },
+      "createdAt": "2026-04-24T08:34:37.841Z"
     }
   ],
   "updates": [
@@ -42,9 +53,20 @@
       "author": {
         "id": "user2",
         "name": "Raj Kumar",
-        "role": "inspector"
+        "role": "admin"
       },
       "createdAt": "2026-04-22T05:45:53.948Z"
+    },
+    {
+      "id": "update-1777101383274-524530",
+      "reportId": "4",
+      "text": "yes, we appreciate your help by informing us . we will make sure to fix it ASAP.",
+      "author": {
+        "id": "user_1777101332516",
+        "name": "Bhumika2005",
+        "role": "admin"
+      },
+      "createdAt": "2026-04-25T07:16:23.274Z"
     }
   ]
 }
