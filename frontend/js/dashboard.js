@@ -71,10 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('report:upvoted', (data) => {
-        const idx = allReports.findIndex(r => r.id.toString() === data.id.toString());
+        if (!data || !data.id) return;
+        const reportIdStr = data.id.toString();
+        const idx = allReports.findIndex(r => r.id.toString() === reportIdStr);
         if (idx !== -1) {
-            allReports[idx].upvotedBy = data.upvotedBy;
-            allReports[idx].upvotes = data.upvotes;
+            allReports[idx].upvotedBy = data.upvotedBy || [];
+            allReports[idx].upvotes = data.upvotes || 0;
             renderReports();
         }
     });
@@ -171,7 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = filtered.map(r => {
             const uId = localStorage.getItem('userId');
-            const hasVoted = r.upvotedBy && Array.isArray(r.upvotedBy) && r.upvotedBy.includes(uId);
+            const voterList = r.upvotedBy || [];
+            const hasVoted = uId && voterList.includes(uId);
             return `
             <div class="report-card" data-id="${r.id}">
                 <div class="report-img-wrapper">
@@ -434,23 +437,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.toggleUpvote = async (id) => {
+        if (!id) return;
         const uId = localStorage.getItem('userId');
+        
+        if (!uId || uId === 'null' || uId === 'undefined') {
+            if (window.showToast) window.showToast('Please sign in to upvote reports.', 'warning');
+            return;
+        }
+
         try {
             const res = await fetch(`/api/reports/${id}/upvote`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-user-role': role,
+                    'x-user-role': localStorage.getItem('userRole') || 'citizen',
                     'x-user-id': uId,
-                    'x-user-email': localStorage.getItem('userEmail')
+                    'x-user-email': localStorage.getItem('userEmail') || ''
                 }
             });
             const data = await res.json();
             if(data.success) {
                 const idx = allReports.findIndex(r => r.id.toString() === id.toString());
                 if(idx !== -1) {
+                    // Update both the count and the voter list to ensure UI consistency
                     allReports[idx].upvotes = data.upvotes;
                     if(!allReports[idx].upvotedBy) allReports[idx].upvotedBy = [];
+                    
                     if(data.isUpvoted) {
                         if(!allReports[idx].upvotedBy.includes(uId)) allReports[idx].upvotedBy.push(uId);
                     } else {
@@ -462,7 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(window.showToast) window.showToast(data.error || 'Failed to upvote', 'error');
             }
         } catch(e) {
-            if(window.showToast) window.showToast('Network error', 'error');
+            console.error('Upvote error:', e);
+            if(window.showToast) window.showToast('Network error while upvoting', 'error');
         }
     };
 

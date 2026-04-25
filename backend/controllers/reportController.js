@@ -168,27 +168,57 @@ const upvoteReport = async (req, res) => {
         const { id } = req.params;
         const userId = req.headers['x-user-id'];
 
-        if (!userId) return res.status(400).json({ success: false, error: 'User ID required for upvoting' });
+        console.log(`[Upvote] Attempt for report ${id} by user ${userId}`);
 
-        const existing = await Report.findOne({ id: id });
-        if (!existing) return res.status(404).json({ error: 'Report not found' });
+        if (!userId || userId === 'null' || userId === 'undefined') {
+            return res.status(400).json({ success: false, error: 'Valid User ID required for upvoting. Please log in again.' });
+        }
 
+        // Find by numeric id first, then by _id (ObjectId)
+        let existing = await Report.findOne({ id: id });
+        if (!existing && mongoose.Types.ObjectId.isValid(id)) {
+            existing = await Report.findById(id);
+        }
+
+        if (!existing) {
+            console.warn(`[Upvote] Report not found: ${id}`);
+            return res.status(404).json({ success: false, error: 'Report not found' });
+        }
+
+        // Initialize upvotedBy if missing
         if (!existing.upvotedBy) existing.upvotedBy = [];
         
         const index = existing.upvotedBy.indexOf(userId);
         if (index === -1) {
             existing.upvotedBy.push(userId);
+            console.log(`[Upvote] User ${userId} added to report ${id}`);
         } else {
             existing.upvotedBy.splice(index, 1);
+            console.log(`[Upvote] User ${userId} removed from report ${id}`);
         }
 
+        // Explicitly mark as modified for Mongoose and save
+        existing.markModified('upvotedBy');
         await existing.save();
 
-        if (io) io.emit('report:upvoted', { id, upvotes: existing.upvotedBy.length, upvotedBy: existing.upvotedBy });
+        if (io) {
+            io.emit('report:upvoted', { 
+                id: existing.id, // Always send back the numeric ID for consistency
+                mongoId: existing._id,
+                upvotes: existing.upvotedBy.length, 
+                upvotedBy: existing.upvotedBy 
+            });
+        }
 
-        res.json({ success: true, upvotes: existing.upvotedBy.length, isUpvoted: index === -1 });
+        res.json({ 
+            success: true, 
+            upvotes: existing.upvotedBy.length, 
+            isUpvoted: index === -1,
+            id: existing.id
+        });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(`[Upvote] Error: ${err.message}`);
+        res.status(500).json({ success: false, error: err.message });
     }
 };
 
