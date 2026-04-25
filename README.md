@@ -1,95 +1,73 @@
 # 🛣️ RoadFix — Citizen Road Issue Reporting Platform
 
-> A full-stack web application that empowers citizens to report road infrastructure problems — potholes, blocked drains, broken streetlights, and more — with live map pinning, image uploads, and a real-time dashboard.
+> A premium full-stack web application that empowers citizens to report road infrastructure problems—potholes, blocked drains, broken streetlights—with live map pinning, image uploads, real-time community interaction, and a professional admin dashboard.
 
 ---
 
 ## ✨ Features
 
-- 📍 **Live Map Pinning** — Click or drag a marker on an interactive Leaflet map to pinpoint the exact issue location
-- 📸 **Image Upload** — Attach a photo directly from your device (up to 5MB)
-- 🏷️ **Issue Categorisation** — Pothole, Blocked Drain, Streetlight Issue, Faded Road Signs, Other
-- ✅ **Inline Success Banner** — After submission, an animated confirmation appears on the same page with a Tracking ID — no page switching needed
-- 📊 **Live Dashboard** — View all submitted reports with status badges, filters by category & status
-- 🔄 **Status Management** — Update reports from `Reported → In Progress → Resolved` with resolution notes
-- 🗑️ **Delete Reports** — Permanently remove resolved or invalid reports
-- 🌙 **Dark / Light Mode** — Full theme toggle with persistent preference
-- 📱 **Fully Responsive** — Works seamlessly on mobile, tablet, and desktop
-
----
-
-## 🗂️ Project Structure
-
-```
-project-ca/
-├── backend/
-│   ├── controllers/
-│   │   └── reportController.js   # CRUD logic for reports
-│   ├── db/
-│   │   ├── database.js           # JSON-based data layer (no external DB needed)
-│   │   └── reports.txt           # Persistent storage file (auto-created)
-│   ├── routes/
-│   │   └── reportRoutes.js       # Express routes + Multer file upload middleware
-│   ├── uploads/                  # Uploaded images stored here (git-ignored)
-│   ├── server.js                 # Express app entry point
-│   └── package.json
-│
-└── frontend/
-    ├── css/
-    │   └── style.css             # Full design system (light/dark, animations)
-    ├── js/
-    │   ├── app.js                # Report form logic, map, submission flow
-    │   ├── dashboard.js          # Dashboard fetching, rendering, actions
-    │   └── theme.js              # Dark/light mode toggle
-    ├── index.html                # Report submission page
-    └── dashboard.html            # Reports dashboard page
-```
+- 📍 **Live Map Pinning** — Pin exact locations using an interactive Leaflet map.
+- 📸 **Image Upload** — Attach photos of issues directly from your device.
+- 🔐 **Role-Based Authentication** — Dynamic login for **Citizens** and **Admins**.
+- 📊 **Real-Time Dashboard** — Live updates via **Socket.io** (No page refreshing needed!).
+- 💬 **Community Discussion** — Citizens can comment on reports to provide local context.
+- 📢 **Official Updates** — Admins can post progress notes and change report status.
+- 🛡️ **Audit Logging** — Every admin action is tracked for full transparency.
+- 🌙 **Modern UI** — Sleek Glassmorphism design with Dark/Light mode support.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
-- [Node.js](https://nodejs.org/) v16 or higher
-- npm (comes with Node.js)
+- [Node.js](https://nodejs.org/) (v18+)
+- [MongoDB](https://www.mongodb.com/) (Local or Atlas Cloud)
 
 ### Installation
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/Rashmijoshi18/RoadFix.git
-cd RoadFix
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/bhuumika07/road_fix.git
+   cd road_fix
+   ```
 
-**2. Install backend dependencies**
-```bash
-cd backend
-npm install
-```
+2. **Setup Backend**
+   ```bash
+   cd backend
+   npm install
+   ```
 
-**3. Start the server**
-```bash
-node server.js
-```
+3. **Configure Environment**
+   Create a `.env` file in the `backend/` folder:
+   ```env
+   PORT=3000
+   MONGO_URI=mongodb://localhost:27017/roadfix
+   ```
 
-**4. Open the app**
-
-Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
-
-> The frontend is served directly by the Express server — no separate frontend server needed.
+4. **Start the App**
+   ```bash
+   npm run dev
+   ```
+   Navigate to `http://localhost:3000` to begin.
 
 ---
 
-## 🔌 API Endpoints
+## 🗂️ Project Architecture
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/reports` | Fetch all reports (supports `?category=` & `?status=` filters) |
-| `POST` | `/api/reports` | Submit a new report (multipart/form-data with optional image) |
-| `PATCH` | `/api/reports/:id/status` | Update the status of a report |
-| `DELETE` | `/api/reports/:id` | Delete a report by ID |
-| `GET` | `/api/reports/stats` | Get report counts grouped by status |
+```
+road_fix/
+├── backend/
+│   ├── config/          # DB connection setup
+│   ├── controllers/     # Business logic (Mongoose/Socket logic)
+│   ├── models/          # MongoDB Schemas (User, Report, Audit, etc.)
+│   ├── routes/          # Express API endpoints
+│   ├── middleware/      # Role-based access control
+│   └── server.js        # Entry point
+└── frontend/
+    ├── css/             # Glassmorphic Design System
+    ├── js/              # Real-time UI logic
+    └── *.html           # Semantic views
+```
 
 ---
 
@@ -98,62 +76,32 @@ Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
 | Layer | Technology |
 |-------|-----------|
 | **Frontend** | HTML5, Vanilla CSS, Vanilla JavaScript |
-| **Mapping** | [Leaflet.js](https://leafletjs.com/) + OpenStreetMap |
-| **Icons** | [Font Awesome 6](https://fontawesome.com/) |
-| **Fonts** | [Outfit](https://fonts.google.com/specimen/Outfit) (Google Fonts) |
-| **Backend** | [Node.js](https://nodejs.org/) + [Express.js](https://expressjs.com/) |
-| **File Uploads** | [Multer](https://github.com/expressjs/multer) |
-| **Data Storage** | JSON flat-file (`reports.txt`) — zero database setup |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB (via Mongoose) |
+| **Real-time** | Socket.io |
+| **Mapping** | Leaflet.js + OpenStreetMap |
+| **Styling** | Custom CSS (Glassmorphism, CSS Variables) |
 
 ---
 
-## 🖼️ Screenshots
+## ☁️ Deployment Guide
 
-### Report an Issue
-- Fill in the issue title, category, description, and nearest address
-- Attach a photo from your device
-- Click on the interactive map to pin the exact location
-- Submit — an animated success banner appears instantly with your Tracking ID
+### 1. Database (MongoDB Atlas)
+- Create a free cluster on [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+- Whitelist `0.0.0.0/0` in Network Access.
+- Get your connection string and update your production `MONGO_URI`.
 
-### Dashboard
-- See all submitted reports as cards with status badges
-- Filter by category or status
-- Update report status or delete reports inline
-
----
-
-## 📁 Environment & Configuration
-
-No `.env` file is required for local development. The server runs on **port 3000** by default.
-
-To change the port, set the `PORT` environment variable before starting:
-```bash
-PORT=5000 node server.js   # Linux/macOS
-$env:PORT=5000; node server.js  # Windows PowerShell
-```
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feat/your-feature`
-3. Commit your changes: `git commit -m 'feat: add your feature'`
-4. Push to the branch: `git push origin feat/your-feature`
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+### 2. Hosting (Render / Heroku)
+- Connect your GitHub repo to **Render** or **Railway**.
+- Set the **Root Directory** to `./backend` (or use a start script that points to the backend).
+- Add your Environment Variables (`MONGO_URI`, `PORT`) in the hosting dashboard.
 
 ---
 
 ## 👩‍💻 Author
 
-**Rashmi Joshi**
-- GitHub: [@Rashmijoshi18](https://github.com/Rashmijoshi18)
+**BHUMIKA**
+- GitHub: [bhuumika07](https://github.com/bhuumika07)
 
 ---
 

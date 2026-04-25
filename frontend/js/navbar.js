@@ -4,7 +4,6 @@
   const PUBLIC_PAGES = ['login.html']
   const ROLE_COLORS = {
     admin:     '#7c3aed',
-    inspector: '#3b82f6', 
     citizen:   '#22c55e'
   }
   
@@ -87,9 +86,8 @@
         })
     }
     
-    // Show inspector-only if inspector or admin
-    if (role === 'inspector' || 
-        role === 'admin') {
+    // Show inspector-only if admin
+    if (role === 'admin') {
       document.querySelectorAll(
         '.inspector-only'
       ).forEach(el => {

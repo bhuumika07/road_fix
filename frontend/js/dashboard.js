@@ -231,18 +231,18 @@ document.addEventListener('DOMContentLoaded', () => {
                             Official Progress Updates
                         </div>
                         <div id="updates-list-${r.id}" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;"></div>
-                        ${(role === 'admin' || role === 'inspector') ? `
+                        ${(role === 'admin') ? `
                             <div style="display:flex; gap:8px;">
                                 <input id="update-input-${r.id}" type="text" maxlength="300" placeholder="Post a progress update..." style="flex:1; padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--input-bg); color:var(--text-primary);">
                                 <button onclick="postOfficialUpdate('${r.id}')" class="btn-primary-hero" style="padding:8px 12px;">Update</button>
                             </div>
                             <div id="update-error-${r.id}" style="display:none; margin:6px 0 0; font-size:0.82rem; color:#ef4444;"></div>
                         ` : `
-                            <div style="font-size:0.82rem; color:var(--text-muted);">Only admins and inspectors can post updates.</div>
+                            <div style="font-size:0.82rem; color:var(--text-muted);">Only admins can post updates.</div>
                         `}
                     </div>
                     <div class="report-admin-actions">
-                        ${(role === 'admin' || role === 'inspector') ? `
+                        ${(role === 'admin') ? `
                             <select onchange="updateStatus('${r.id}', this.value)">
                                 <option value="" disabled selected>Change Status</option>
                                 <option value="Reported">Reported</option>

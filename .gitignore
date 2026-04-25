@@ -1,9 +1,20 @@
+# Node dependencies
 node_modules/
+
+# Environment variables
+.env
+*.env
+
+# Local uploads
 backend/uploads/*
 !backend/uploads/.gitkeep
-*.env
-.env
 
-# Live data files — do not commit
-backend/db/reports.txt
-backend/reports.txt
+# IDE and OS files
+.DS_Store
+.vscode/
+Thumbs.db
+
+# Legacy files (no longer used)
+backend/db/*.txt
+backend/db/*.js
+backend/db/

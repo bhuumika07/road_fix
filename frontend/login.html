@@ -10,20 +10,59 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         body { 
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0); 
+            background: linear-gradient(45deg, #f8fafc, #e2e8f0, #f1f5f9, #cbd5e1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex; 
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
             padding: 24px; 
             margin: 0;
+            position: relative;
+            overflow: hidden;
         }
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background: linear-gradient(45deg, #0f172a, #1e293b, #020617, #334155);
+            background-size: 400% 400%;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .shape {
+            position: absolute;
+            filter: blur(60px);
+            z-index: 0;
+            border-radius: 50%;
+            animation: float 10s ease-in-out infinite;
+        }
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: rgba(59, 130, 246, 0.3);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(168, 85, 247, 0.2);
+            bottom: -150px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
         }
         .login-wrapper {
             width: 100%;
             max-width: 440px;
+            position: relative;
+            z-index: 1;
         }
         .brand-header {
             text-align: center;
@@ -41,12 +80,24 @@
             margin: 0;
         }
         .login-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
             margin-bottom: 24px;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .login-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 45px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] .login-card {
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         .form-group {
             margin-bottom: 20px;
@@ -109,16 +160,22 @@
             text-align: center;
         }
         .demo-panel {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px dashed #cbd5e1;
+            border: 1px dashed rgba(203, 213, 225, 0.8);
             font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+        .demo-panel:hover {
+            transform: translateY(-2px);
         }
         [data-theme="dark"] .demo-panel {
-            background: #1e293b;
-            border-color: #334155;
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(51, 65, 85, 0.8);
             color: #e2e8f0;
         }
         .demo-panel h3 {
@@ -195,6 +252,9 @@
 </head>
 <body data-theme="light">
 
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
     <div class="login-wrapper">
         <div class="brand-header">
             <i class="fa-solid fa-road"></i>
@@ -216,13 +276,36 @@
                     <div class="input-wrapper">
                         <i class="fa-solid fa-lock left-icon"></i>
                         <input type="password" id="password" placeholder="Enter your password" required tabindex="2">
-                        <button type="button" class="toggle-pwd" id="toggle-pwd" tabindex="-1">
+                        <button type="button" class="toggle-pwd" id="toggle-pwd-main" tabindex="-1">
                             <i class="fa-solid fa-eye"></i>
                         </button>
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary-hero" style="width: 100%; justify-content: center; margin-top: 8px; border:none; cursor:pointer;" id="submit-btn" tabindex="3">
+                <div class="form-group">
+                    <label>Login As</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user left-icon"></i>
+                        <select id="role" required tabindex="3" style="width: 100%; padding: 12px 14px 12px 42px; border: 2px solid #e5e7eb; border-radius: 10px; font-family: 'Outfit'; font-size: 1rem; background: var(--input-bg); color: var(--text-primary); transition: all 0.2s; box-sizing: border-box; cursor: pointer; appearance: none;">
+                            <option value="citizen">Citizen / Reporter</option>
+                            <option value="admin">Official / Admin</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none;"></i>
+                    </div>
+                </div>
+
+                <div class="form-group" id="passcode-group" style="display: none;">
+                    <label>Admin Passcode</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-key left-icon"></i>
+                        <input type="password" id="passcode" placeholder="Enter admin passcode" tabindex="4">
+                        <button type="button" class="toggle-pwd" id="toggle-pwd-admin" tabindex="-1">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary-hero" style="width: 100%; justify-content: center; margin-top: 8px; border:none; cursor:pointer;" id="submit-btn" tabindex="5">
                     Sign In <i class="fa-solid fa-arrow-right"></i>
                 </button>
                 
@@ -230,33 +313,7 @@
             </form>
         </div>
 
-        <div class="demo-panel">
-            <h3><i class="fa-solid fa-flask"></i> Demo Credentials</h3>
-            
-            <div class="demo-card">
-                <div class="demo-info">
-                    <strong>👤 Admin</strong>
-                    <span>admin@roadfix.com / admin123</span>
-                </div>
-                <button class="btn-use" onclick="fillDemo('admin@roadfix.com', 'admin123')">Use This</button>
-            </div>
-            
-            <div class="demo-card">
-                <div class="demo-info">
-                    <strong>🔍 Inspector</strong>
-                    <span>inspector@roadfix.com / inspect123</span>
-                </div>
-                <button class="btn-use" onclick="fillDemo('inspector@roadfix.com', 'inspect123')">Use This</button>
-            </div>
-            
-            <div class="demo-card">
-                <div class="demo-info">
-                    <strong>🏠 Citizen</strong>
-                    <span>citizen@roadfix.com / citizen123</span>
-                </div>
-                <button class="btn-use" onclick="fillDemo('citizen@roadfix.com', 'citizen123')">Use This</button>
-            </div>
-        </div>
+
     </div>
 
     <!-- Auth JS Logic -->
@@ -269,24 +326,37 @@
             }
 
             const loginForm = document.getElementById('loginForm');
-            const togglePwdBtn = document.getElementById('toggle-pwd');
+            const togglePwdMainBtn = document.getElementById('toggle-pwd-main');
             const pwdInput = document.getElementById('password');
+            const togglePwdAdminBtn = document.getElementById('toggle-pwd-admin');
+            const passcodeInput = document.getElementById('passcode');
             const errorMsg = document.getElementById('error-msg');
             const submitBtn = document.getElementById('submit-btn');
+            const roleSelect = document.getElementById('role');
+            const passcodeGroup = document.getElementById('passcode-group');
 
-            togglePwdBtn.addEventListener('click', () => {
-                const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                pwdInput.setAttribute('type', type);
-                togglePwdBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+            roleSelect.addEventListener('change', () => {
+                if (roleSelect.value === 'admin') {
+                    passcodeGroup.style.display = 'block';
+                    passcodeInput.setAttribute('required', 'true');
+                } else {
+                    passcodeGroup.style.display = 'none';
+                    passcodeInput.removeAttribute('required');
+                    passcodeInput.value = '';
+                }
             });
 
-            window.fillDemo = function(email, pwd) {
-                document.getElementById('email').value = email;
-                document.getElementById('password').value = pwd;
-                errorMsg.style.display = 'none';
-                loginForm.classList.add('flash');
-                setTimeout(() => loginForm.classList.remove('flash'), 500);
-            };
+            togglePwdMainBtn.addEventListener('click', () => {
+                const type = pwdInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                pwdInput.setAttribute('type', type);
+                togglePwdMainBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+            });
+
+            togglePwdAdminBtn.addEventListener('click', () => {
+                const type = passcodeInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passcodeInput.setAttribute('type', type);
+                togglePwdAdminBtn.innerHTML = type === 'password' ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+            });
 
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -294,6 +364,8 @@
                 
                 const email = document.getElementById('email').value;
                 const password = pwdInput.value;
+                const role = roleSelect.value;
+                const passcode = passcodeInput.value;
                 
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
@@ -302,7 +374,7 @@
                     const res = await fetch('/api/auth/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password })
+                        body: JSON.stringify({ email, password, role, passcode })
                     });
                     const data = await res.json();
                     
