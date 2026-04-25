@@ -73,13 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('report:upvoted', (data) => {
         const idx = allReports.findIndex(r => r.id.toString() === data.id.toString());
         if (idx !== -1) {
+            allReports[idx].upvotedBy = data.upvotedBy;
             allReports[idx].upvotes = data.upvotes;
-            if(data.userEmail && data.userEmail !== localStorage.getItem('userEmail')) {
-                renderReports(); 
-            } else {
-                const countBadge = document.getElementById(`upvote-count-${data.id}`);
-                if(countBadge) countBadge.textContent = data.upvotes;
-            }
+            renderReports();
         }
     });
 
@@ -159,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (sort === 'newest') filtered.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
         if (sort === 'oldest') filtered.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-        if (sort === 'upvotes') filtered.sort((a,b) => (b.upvotes||0) - (a.upvotes||0));
+        if (sort === 'upvotes') filtered.sort((a,b) => ((b.upvotedBy||[]).length) - ((a.upvotedBy||[]).length));
 
         if (filtered.length === 0) {
             container.innerHTML = `
@@ -197,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="report-actions">
                         <button type="button" class="view-details-link" onclick="toggleDetails('${r.id}')">View Details <i class="fa-solid fa-arrow-right"></i></button>
                         <button class="btn-upvote ${hasVoted ? 'voted' : ''}" onclick="toggleUpvote('${r.id}')">
-                            <i class="fa-solid fa-thumbs-up"></i> <span id="upvote-count-${r.id}">${r.upvotes || 0}</span>
+                            <i class="fa-solid fa-thumbs-up"></i> <span id="upvote-count-${r.id}">${(r.upvotedBy || []).length}</span>
                         </button>
                     </div>
                     <div id="report-details-${r.id}" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border); border-radius:10px; background:var(--bg-main);">
