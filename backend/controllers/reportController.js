@@ -1,3 +1,6 @@
+const axios = require('axios');
+const fs = require('fs');
+const FormData = require('form-data');
 const Report = require('../models/Report');
 const AuditLog = require('../models/AuditLog');
 const Comment = require('../models/Comment');
@@ -11,6 +14,28 @@ const getActor = (req) => ({
     name: req.headers['x-user-name'] || 'Unknown User',
     role: req.headers['x-user-role'] || 'unknown'
 });
+
+const uploadToImgBB = async (filePath) => {
+    try {
+        const apiKey = process.env.IMGBB_API_KEY;
+        if (!apiKey) return null;
+
+        const form = new FormData();
+        form.append('image', fs.createReadStream(filePath));
+
+        const response = await axios.post(`https://api.imgbb.com/1/upload?key=${apiKey}`, form, {
+            headers: form.getHeaders()
+        });
+
+        if (response.data && response.data.success) {
+            return response.data.data.url;
+        }
+        return null;
+    } catch (error) {
+        console.error('ImgBB Upload Error:', error.message);
+        return null;
+    }
+};
 
 const appendAuditLog = async ({ action, actor, reportId, details }) => {
     try {
@@ -56,7 +81,17 @@ const createReport = async (req, res) => {
         }
 
         if (req.file) {
-            image_url = `/uploads/${req.file.filename}`;
+            const cloudUrl = await uploadToImgBB(req.file.path);
+            if (cloudUrl) {
+                image_url = cloudUrl;
+                // Delete local file after upload
+                fs.unlink(req.file.path, (err) => {
+                    if (err) console.error('Error deleting local file:', err);
+                });
+            } else {
+                // Fallback to local if cloud fails
+                image_url = `/uploads/${req.file.filename}`;
+            }
         }
 
         // Get highest ID for auto-increment simulation
